@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"Aufgabe.C": "cpp",
+			"Vorlage.C": "cpp",
+			"array.C": "cpp"
+		}
+	}
+}

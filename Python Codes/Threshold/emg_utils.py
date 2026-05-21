@@ -1,4 +1,5 @@
 import numpy as np
+from onset_utils import compute_rms, compute_tkeo
 
 BASELINE_S   = 1.0
 ANALOG_RATE  = 2000
@@ -6,35 +7,9 @@ baseline_samples = int(BASELINE_S * ANALOG_RATE)
 
 
 """
-schiebe ein Fenster über das Signal, und bilde in jedem Fenster den quadratischen Mittelwert(rms)
-"""
-def compute_rms(signal, window):
-    rms_values = []
-    for i in range(len(signal) - window + 1): #len(signal)-window+1 verhindert, dass
-        ausschnitt = signal[i:i+window]        #Fenster übers Ende hinaus geht
-        quadriert  = ausschnitt ** 2           #+1 bewirkt 99%ige Überlappung
-        mittelwert = np.mean(quadriert)
-        rms        = np.sqrt(mittelwert)
-        rms_values.append(rms)
-    return np.array(rms_values)
-
-
-"""
-schiebe ein Fenster über das Signal, und bilde in jedem Fenster den TKEO-Mittelwert
-"""
-def compute_tkeo(signal, window):
-    tkeo_values = []
-    for i in range(len(signal) - window + 1):
-        ausschnitt = signal[i:i+window]
-        tkeo       = ausschnitt[1:-1]**2 - ausschnitt[:-2] * ausschnitt[2:]
-        tkeo_values.append(np.mean(np.abs(tkeo)))
-    return np.array(tkeo_values)
-
-
-"""
 finde die Aktivitätsphasen
 """
-def detect_phases(signal, threshold, min_dauer_ms=50):
+def detect_phases(signal, threshold, min_dauer_ms=2000):
     phases   = []
     in_phase = False
     onset    = 0
@@ -57,10 +32,12 @@ def detect_phases(signal, threshold, min_dauer_ms=50):
         phases.append((onset, len(signal) - 1))
 
     #nur Phasen behalten die länger als min_dauer sind
-    phases = [(onset, offset) for onset, offset in phases
-              if (offset - onset) / ANALOG_RATE * 1000 >= min_dauer_ms]
+    gefiltert = []
+    for onset, offset in phases:
+        if (offset - onset) / ANALOG_RATE * 1000 >= min_dauer_ms:
+            gefiltert.append((onset, offset))
 
-    return phases
+    return gefiltert
 
 
 """
@@ -103,7 +80,7 @@ def compute_doubleThreshold(signal, t1_std, t2_std):
 finde Aktivitätsphasen mit zwei Schwellen:
 Onset wenn Signal über T1, Offset erst wenn Signal unter T2
 """
-def detect_doublePhases(signal, t1, t2, min_dauer_ms=50):
+def detect_doublePhases(signal, t1, t2, min_dauer_ms=2000):
     phases   = []
     in_phase = False
     onset    = 0
@@ -126,7 +103,9 @@ def detect_doublePhases(signal, t1, t2, min_dauer_ms=50):
         phases.append((onset, len(signal) - 1))
 
     #nur Phasen behalten die länger als min_dauer sind
-    phases = [(onset, offset) for onset, offset in phases
-              if (offset - onset) / ANALOG_RATE * 1000 >= min_dauer_ms]
+    gefiltert = []
+    for onset, offset in phases:
+        if (offset - onset) / ANALOG_RATE * 1000 >= min_dauer_ms:
+            gefiltert.append((onset, offset))
 
-    return phases
+    return gefiltert

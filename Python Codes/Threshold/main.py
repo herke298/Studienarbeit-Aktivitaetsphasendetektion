@@ -13,5 +13,5 @@ onsetDetection_simpleThresholdTKEO(FILE_PATH,  threshold_std=5)
 onsetDetection_doubleThresholdRMS(FILE_PATH,   t1_std=5, t2_std=2)
 onsetDetection_doubleThresholdTKEO(FILE_PATH,  t1_std=5, t2_std=2)
 
-onsetDetection_adaptiveThresholdRMS(FILE_PATH,  threshold_std=3, min_dauer_ms=50)
-onsetDetection_adaptiveThresholdTKEO(FILE_PATH, threshold_std=3, min_dauer_ms=50)
+onsetDetection_adaptiveThresholdRMS(FILE_PATH,  threshold_std=3, min_dauer_ms=2000)
+onsetDetection_adaptiveThresholdTKEO(FILE_PATH, threshold_std=3, min_dauer_ms=2000)

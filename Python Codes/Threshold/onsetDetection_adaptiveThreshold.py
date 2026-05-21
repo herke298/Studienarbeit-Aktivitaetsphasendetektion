@@ -50,10 +50,12 @@ def detect_adaptivePhases(signal, threshold_std, min_dauer_ms=2000):
         phases.append((onset, len(signal) - 1))
 
     #nur Phasen behalten die länger als min_dauer sind
-    phases = [(onset, offset) for onset, offset in phases
-              if (offset - onset) / ANALOG_RATE * 1000 >= min_dauer_ms]
+    gefiltert = []
+    for onset, offset in phases:
+        if (offset - onset) / ANALOG_RATE * 1000 >= min_dauer_ms:
+            gefiltert.append((onset, offset))
 
-    return phases
+    return gefiltert
 
 
 """
@@ -75,4 +77,4 @@ def onsetDetection_adaptiveThreshold(file_path, threshold_std, min_dauer_ms=2000
 
 # Aufruf
 FILE_PATH = r"C:\Studienarbeit\Studienarbeit_Codeuebergabe\Messdaten\AD0805\AD0805_Isometric_Extension_Max_Left_2025_05_08.c3d"
-onsetDetection_adaptiveThreshold(FILE_PATH, threshold_std=3, min_dauer_ms=50)
+onsetDetection_adaptiveThreshold(FILE_PATH, threshold_std=3, min_dauer_ms=2000)

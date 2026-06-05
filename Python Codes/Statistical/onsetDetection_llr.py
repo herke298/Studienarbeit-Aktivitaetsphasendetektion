@@ -78,7 +78,9 @@ def onsetDetection_bayesTKEO(file_path, prior_activity=0.2, onset_threshold=0, o
         mean0, std0        = compute_baseline_stats(envelope)
         mean1, std1        = compute_activity_stats(envelope)
         llr                = compute_llr(envelope, mean0, std0, mean1, std1, window_samples)
+        """Unterschied zum normalen LLR"""
         bayes_score        = compute_bayes(llr, prior_activity)
+
         all_phases[muscle] = detect_llrPhases(bayes_score, onset_threshold, offset_threshold, min_dauer_ms)
 
     plot_onset(emg_data, all_phases, t_signal, "Bayes TKEO")

@@ -80,6 +80,8 @@ def detect_llrPhases(llr, onset_threshold=0, offset_threshold=0, min_dauer_ms=20
     return gefiltert
 
 
+
+
 """
 berechne Bayes-Score: LLR verschoben um den Prior
 prior_activity: Vorabwahrscheinlichkeit dass eine Phase Aktivität ist (z.B. 0.2 = 20%)
